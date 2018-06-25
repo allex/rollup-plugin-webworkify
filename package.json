@@ -1,0 +1,32 @@
+{
+  "name": "rollup-plugin-webworkify",
+  "version": "0.0.1",
+  "description": "Bundles web worker alongside your main.",
+  "author": "Allex Wang <allex.wxn@gmail.com>",
+  "main": "lib/index.js",
+  "repository": "allex/rollup-plugin-webworkify",
+  "scripts": {
+    "build": "npm run lint:fix && rollup-bundle --config ./.fssrc.js",
+    "prepare": "npm run build",
+    "lint": "standard",
+    "lint:fix": "standard --fix",
+    "test": "npm run lint"
+  },
+  "keywords": [
+    "rollup",
+    "rollup-plugin",
+    "webworker",
+    "worker"
+  ],
+  "devDependencies": {
+    "@babel/core": "latest",
+    "@babel/plugin-external-helpers": "latest",
+    "@babel/plugin-transform-runtime": "latest",
+    "@babel/preset-env": "latest",
+    "@fedor/standard": "latest",
+    "babel-core": "next",
+    "rollup-plugin-babel": "beta",
+    "rollup-worker": "next"
+  },
+  "license": "MIT"
+}
