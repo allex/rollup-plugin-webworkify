@@ -1,18 +1,24 @@
-const fs = require('fs'),
-  path = require('path'),
-  paths = new Map()
+import { readFileSync } from 'fs'
+import { resolve, dirname } from 'path' // eslint-disable-line no-unused-vars
+import defaultResolver from './defaultResolver'
+import { WORKER_PREFIX, HELPERS_ID, HELPERS_FILE } from './helpers'
 
-export default () => {
+function startsWith (str, prefix) {
+  return str.slice(0, prefix.length) === prefix
+}
+
+export default (options = {}) => {
+  const paths = new Map()
   return {
     name: 'webworkify',
 
     resolveId (importee, importer) {
-      if (importee === 'rollup-plugin-webworkify') {
-        return path.resolve(__dirname, 'workerhelper.js')
-      } else if (importee.indexOf('worker#') === 0) {
-        const name = importee.split('#')[1],
-          target = path.resolve(path.dirname(importer), name)
-        paths.set(target, name)
+      if (importee === HELPERS_ID) {
+        return HELPERS_FILE
+      } else if (startsWith(importee, WORKER_PREFIX)) {
+        importee = importee.slice(WORKER_PREFIX.length)
+        const target = defaultResolver(importee, importer)
+        paths.set(target, importee)
         return target
       }
     },
@@ -25,12 +31,20 @@ export default () => {
       if (!paths.has(id)) {
         return
       }
+
       // wrapper as a commonjs module
-      const code = `
-var shimWorker = require('rollup-plugin-webworkify')
-module.exports = new shimWorker(${JSON.stringify(paths.get(id))}, function () {
-  ${fs.readFileSync(id, 'utf-8')}
-})`
+      const code =
+`
+import * as webworkify from "${HELPERS_ID}"
+export default webworkify.workerCtor(${JSON.stringify(paths.get(id))}, function () {
+  var createWebworkifyModule = function (fn, module) {
+    return module = { exports: {} }, fn(module, module.exports), module.exports
+  }
+  return createWebworkifyModule(function (module, exports) {
+    ${readFileSync(id, 'utf8')}
+  })
+})
+`
       return code
     }
   }

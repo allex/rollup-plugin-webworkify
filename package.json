@@ -18,15 +18,28 @@
     "webworker",
     "worker"
   ],
+  "dependencies": {
+  },
   "devDependencies": {
     "@babel/core": "latest",
-    "@babel/plugin-external-helpers": "latest",
-    "@babel/plugin-transform-runtime": "latest",
-    "@babel/preset-env": "latest",
+    "@babel/plugin-external-helpers": "^7.0.0-beta.47",
+    "@babel/plugin-transform-runtime": "^7.0.0-beta.47",
+    "@babel/preset-env": "^7.0.0-beta.47",
+    "@babel/runtime": "^7.0.0-beta.49",
     "@fedor/standard": "latest",
     "babel-core": "next",
+    "babel-plugin-transform-decorators-legacy": "latest",
     "rollup-plugin-babel": "beta",
-    "rollup-worker": "next"
+    "rollup-pluginutils": "^2.0.1",
+    "rollup-worker": "next",
+    "estree-walker": "^0.5.1",
+    "magic-string": "^0.22.4",
+    "resolve": "^1.5.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "standard": {
+    "ignore": [
+      "src/index2.js"
+    ]
+  }
 }

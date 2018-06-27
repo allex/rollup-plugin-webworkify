@@ -1,7 +1,8 @@
 // vim: set ft=javascript fdm=marker et ff=unix tw=80 sw=2:
 
+import babel from 'rollup-plugin-babel'
+
 const path = require('path')
-const babel = require('rollup-plugin-babel')
 
 const { version, name, author, license, dependencies } = require('./package.json')
 
@@ -23,6 +24,7 @@ const banner = (name, short = false) => {
 module.exports = {
   rollup: {
     destDir: path.join(__dirname, './lib'),
+    dependencies: Object.keys(dependencies).concat([ 'fs', 'path', 'events', 'module', 'util' ]),
     entry: [
       {
         input: 'src/workerHelper.js',
@@ -33,7 +35,7 @@ module.exports = {
         ],
         targets: [
           {
-            format: 'cjs',
+            format: 'es',
             file: 'workerHelper.js',
             banner: banner(name + '/workerHelper.js', true)
           }
