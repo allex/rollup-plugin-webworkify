@@ -105,7 +105,7 @@ function WorkerEmitter (target, interObj) {
     }
   }
   target.destroy = function () {
-    Object.key(listeners).forEach(t => {
+    Object.keys(listeners).forEach(t => {
       const arr = listeners[t]
       if (arr) {
         arr.length = 0

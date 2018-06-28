@@ -35,15 +35,10 @@ export default (options = {}) => {
       // wrapper as a commonjs module
       const code =
 `
-import * as webworkify from "${HELPERS_ID}"
-export default webworkify.workerCtor(${JSON.stringify(paths.get(id))}, function () {
-  var createWebworkifyModule = function (fn, module) {
-    return module = { exports: {} }, fn(module, module.exports), module.exports
-  }
-  return createWebworkifyModule(function (module, exports) {
-    ${readFileSync(id, 'utf8')}
-  })
-})
+import * as webworkify from '${HELPERS_ID}'
+export default webworkify.workerCtor('${paths.get(id)}', function() { return (function(e,r){return e(r={exports:{}},r.exports),r.exports})(function (module, exports) {
+  ${readFileSync(id, 'utf8')}
+});})
 `
       return code
     }
