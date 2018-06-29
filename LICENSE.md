@@ -1,4 +1,4 @@
-Copyright (c) 2018, Allex <http://iallex.com/>
+Copyright (c) 2018, Allex Wang <http://iallex.com/>
 
 Permission to use, copy, modify, and/or distribute this software for any purpose
 with or without fee is hereby granted, provided that the above copyright notice

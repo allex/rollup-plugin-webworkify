@@ -34,18 +34,15 @@ export function workerCtor (filename, fn) {
       return new Worker(filename)
     } else if (Worker && !forceFallback) {
       // Convert the function's inner code to a string to construct the worker
-      const source =
-        ';(function(f){' +
-          `f = (${fn.toString()})();` +
-          // try to call default if defined to also support babel esmodule exports
-          'f && new (f.default ? f.default : f)(self);' +
-        '}())'
+      // try to call default if defined to also support babel esmodule exports
+      const source = `;(function(f){f&&new(f.default?f["default"]:f)(self)}((${fn.toString()})()))`
 
       const objURL = createSourceObject(source)
-      o[TARGET] = new Worker(objURL)
+      const worker = new Worker(objURL)
+
       URL.revokeObjectURL(objURL)
 
-      return o[TARGET]
+      return (o[TARGET] = worker)
     } else {
       // Fallback worker implements
       const selfShim = new WorkerEmitter({
