@@ -4,7 +4,6 @@ import babel from 'rollup-plugin-babel'
 import { terser } from 'rollup-plugin-terser'
 
 const path = require('path')
-
 const { version, name, author, license, dependencies } = require('./package.json')
 
 const banner = (name, short = false) => {
@@ -31,41 +30,24 @@ export default {
         compress: true, mangle: true,
         output: {
           beautify: true, indent_level: 2,
-          comments: function (n, c) { var text = c.value, type = c.type; if (type === 'comment2') return /^!|@preserve|@license|@cc_on| Licensed/i.test(text) }
+          comments (n, c) { var text = c.value, type = c.type; if (type === 'comment2') return /^!|@preserve|@license|@cc_on| Licensed/i.test(text) }
         }
       }
     }
   },
   entry: [
     {
-      input: 'src/workerHelper.js',
-      plugins: [
-        babel,
-        'resolve',
-        'commonjs',
-        terser
-      ],
+      input: 'src/workerhelper.js',
+      plugins: [ babel, 'resolve', 'commonjs', terser ],
       targets: [
-        {
-          format: 'es',
-          file: 'workerHelper.js',
-          banner: banner(name + '/workerHelper.js', true)
-        }
+        { format: 'es', file: 'workerhelper.js', banner: banner(name + '/workerhelper.js', true) }
       ]
     },
     {
       input: 'src/index.js',
-      plugins: [
-        babel,
-        'resolve',
-        'commonjs'
-      ],
+      plugins: [ babel, 'resolve', 'commonjs' ],
       targets: [
-        {
-          format: 'cjs',
-          file: 'index.js',
-          banner: banner(name)
-        }
+        { format: 'cjs', file: 'index.js', banner: banner(name) }
       ]
     }
   ]

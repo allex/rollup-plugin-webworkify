@@ -9,7 +9,7 @@ const win = window,
   BlobBuilder = win.BlobBuilder || win.WebKitBlobBuilder || win.MozBlobBuilder || win.MSBlobBuilder,
   URL = win.URL || win.webkitURL || win.mozURL || win.msURL,
   SCRIPT_TYPE = 'application/javascript',
-  TARGET = typeof Symbol === 'undefined' ? '__t' + +new Date() : Symbol() // eslint-disable-line symbol-description
+  TARGET = (typeof Symbol === 'undefined') ? '__t' + +new Date() : Symbol() // eslint-disable-line symbol-description
 
 let Worker = win.Worker // eslint-disable-line no-native-reassign
 
