@@ -34,7 +34,8 @@ export default {
 For each worker that you want to create, import the file with a `worker#` prefix:
 
 ```js
-import work from 'worker#../lib/worker.js'
+// import work from 'worker#../lib/worker.js'
+import work from '../lib/foo.worker.js'
 
 var w = new work
 w.addEventListener('message', function (e) {
@@ -44,7 +45,7 @@ w.addEventListener('message', function (e) {
 w.postMessage(4) // send the worker a message
 ```
 
-then worker.js, The worker function lives inside of the module.exports:
+then `foo.worker.js`, The worker function lives inside of the module.exports:
 
 ```js
 var gamma = require('gamma')
