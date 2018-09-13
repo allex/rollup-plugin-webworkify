@@ -19,7 +19,12 @@ import webworkify from 'rollup-plugin-webworkify';
 
 export default {
   entry: 'src/main.js',
-  plugins: [ webworkify() ],
+  plugins: [
+    webworkify({
+      // specifically patten files
+      pattern: '**/*.worker.js'  // Default: undefined (follow micromath globs)
+    })
+  ],
   format: 'umd'
 };
 ```

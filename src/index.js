@@ -2,22 +2,34 @@ import { readFileSync } from 'fs'
 import { resolve, dirname } from 'path' // eslint-disable-line no-unused-vars
 import defaultResolver from './defaultResolver'
 import { WORKER_PREFIX, HELPERS_ID, HELPERS_FILE } from './helpers'
+import { createFilter } from 'rollup-pluginutils'
 
-function startsWith (str, prefix) {
-  return str.slice(0, prefix.length) === prefix
-}
+const startsWith = (str, prefix) => str.slice(0, prefix.length) === prefix
 
 export default (options = {}) => {
   const paths = new Map()
+  const { pattern } = options
+
+  const filter = (pattern && pattern.length)
+    ? createFilter(pattern)
+    : v => false
+
+  const resolveWorkerImportee = (id, importer) => {
+    if (startsWith(id, WORKER_PREFIX)) {
+      return defaultResolver(id.slice(WORKER_PREFIX.length), importer)
+    } else if (filter(id = defaultResolver(id, importer))) {
+      return id
+    }
+  }
+
   return {
     name: 'webworkify',
 
     resolveId (importee, importer) {
+      let target
       if (importee === HELPERS_ID) {
         return HELPERS_FILE
-      } else if (startsWith(importee, WORKER_PREFIX)) {
-        importee = importee.slice(WORKER_PREFIX.length)
-        const target = defaultResolver(importee, importer)
+      } else if (target = resolveWorkerImportee(importee, importer)) {
         paths.set(target, importee)
         return target
       }
